@@ -37,9 +37,22 @@ export class AuthService {
     if (!isMatch) {
       throw new UnauthorizedException('Invalid password');
     }
+
     const accessToken = this.generateToken(findUser);
     return {
+      id: findUser.id,
       accessToken,
     };
+  }
+
+  async validateToken(token: string): Promise<boolean> {
+    try {
+      const payload = this.jwtService.verify(token);
+      const user = await this.userService.findUserById(payload.id);
+      return !!user;
+    } catch (error) {
+      throw error;
+      return false;
+    }
   }
 }

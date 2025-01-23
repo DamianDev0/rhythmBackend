@@ -56,4 +56,8 @@ export class UserService {
     }
     return activeUser;
   }
+
+  async findUserById(id: string): Promise<User | null> {
+    return this.UserRepository.findOne({ where: { id } });
+  }
 }
