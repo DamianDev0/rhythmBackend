@@ -8,8 +8,8 @@ export class NotificationsController {
   @Post('send')
   async sendNotification(
     @Body('message') message: string,
-    @Body('playerIds') playerIds: string[],
+    @Body('filters') filters: any[],
   ) {
-    return this.oneSignalService.sendNotification(message, playerIds);
+    return this.oneSignalService.sendNotification(message, filters);
   }
 }
