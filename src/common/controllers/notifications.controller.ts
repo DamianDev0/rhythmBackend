@@ -7,9 +7,10 @@ export class NotificationsController {
 
   @Post('send')
   async sendNotification(
+    @Body('title') title: string,
     @Body('message') message: string,
-    @Body('filters') filters: any[],
+    @Body('oneSignalIds') oneSignalIds: string[],
   ) {
-    return this.oneSignalService.sendNotification(message, filters);
+    return this.oneSignalService.sendNotification(title, message, oneSignalIds);
   }
 }
