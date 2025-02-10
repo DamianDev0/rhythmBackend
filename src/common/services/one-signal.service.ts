@@ -5,7 +5,8 @@ import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class OneSignalService {
   private readonly ONE_SIGNAL_APP_ID = 'eae0142a-8b54-48b5-886d-493f595aeba7';
-  private readonly ONE_SIGNAL_REST_API_KEY = 'TU-REST-API-KEY';
+  private readonly ONE_SIGNAL_REST_API_KEY =
+    'os_v2_app_5lqbikulkrellcdnje7vswxlu6qtclhk46ku2bmd5brl7orwkvyubdi7fv53wjxy3mg4bd4zlf7i64fzyqjhdxsz4s5utpc2at6jnui';
 
   constructor(private readonly httpService: HttpService) {}
 
