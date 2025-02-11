@@ -11,8 +11,6 @@ export class NotificationsController {
     @Body('message') message: string,
     @Body('oneSignalIds') oneSignalIds: string[],
     @Body('scheduleOptions')
-    @Body('filters')
-    filters?: any[],
     scheduleOptions?: {
       sendAfter?: string;
       delayedOption?: 'timezone' | 'last-active';
@@ -23,7 +21,6 @@ export class NotificationsController {
       title,
       message,
       oneSignalIds,
-      filters,
       scheduleOptions,
     );
   }

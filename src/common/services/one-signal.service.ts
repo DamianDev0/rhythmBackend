@@ -13,12 +13,11 @@ export class OneSignalService {
   async sendNotification(
     title: string,
     message: string,
-    oneSignalIds?: string[],
-    filters?: any[],
+    oneSignalIds: string[],
     scheduleOptions?: {
-      sendAfter?: string;
+      sendAfter?: string; // ISO 8601 format
       delayedOption?: 'timezone' | 'last-active';
-      deliveryTimeOfDay?: string;
+      deliveryTimeOfDay?: string; // E.g., "9:00AM"
     },
   ) {
     const url = 'https://api.onesignal.com/notifications';
@@ -30,28 +29,23 @@ export class OneSignalService {
 
     const data: any = {
       app_id: this.ONE_SIGNAL_APP_ID,
+      include_aliases: { onesignal_id: oneSignalIds },
       target_channel: 'push',
       headings: { en: title },
       contents: { en: message },
     };
 
-    if (oneSignalIds?.length) {
-      data.include_aliases = { onesignal_id: oneSignalIds };
-    } else if (filters?.length) {
-      data.filters = filters;
-    } else {
-      throw new Error(
-        'Debes proporcionar al menos un "oneSignalId" o definir "filters".',
-      );
-    }
-
+    // Agregar programación si se especifica
     if (scheduleOptions) {
-      if (scheduleOptions.sendAfter)
+      if (scheduleOptions.sendAfter) {
         data.send_after = scheduleOptions.sendAfter;
-      if (scheduleOptions.delayedOption)
+      }
+      if (scheduleOptions.delayedOption) {
         data.delayed_option = scheduleOptions.delayedOption;
-      if (scheduleOptions.deliveryTimeOfDay)
+      }
+      if (scheduleOptions.deliveryTimeOfDay) {
         data.delivery_time_of_day = scheduleOptions.deliveryTimeOfDay;
+      }
     }
 
     try {
