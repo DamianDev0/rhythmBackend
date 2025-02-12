@@ -1,23 +1,32 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class OneSignalService {
-  private readonly ONE_SIGNAL_APP_ID = 'eae0142a-8b54-48b5-886d-493f595aeba7';
-  private readonly ONE_SIGNAL_REST_API_KEY =
-    'os_v2_app_5lqbikulkrellcdnje7vswxlu6qtclhk46ku2bmd5brl7orwkvyubdi7fv53wjxy3mg4bd4zlf7i64fzyqjhdxsz4s5utpc2at6jnui';
+  private readonly ONE_SIGNAL_APP_ID: string;
+  private readonly ONE_SIGNAL_REST_API_KEY: string;
 
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
+  ) {
+    this.ONE_SIGNAL_APP_ID =
+      this.configService.get<string>('ONE_SIGNAL_APP_ID');
+    this.ONE_SIGNAL_REST_API_KEY = this.configService.get<string>(
+      'ONE_SIGNAL_REST_API_KEY',
+    );
+  }
 
   async sendNotification(
     title: string,
     message: string,
     oneSignalIds: string[],
     scheduleOptions?: {
-      sendAfter?: string; // ISO 8601 format
+      sendAfter?: string;
       delayedOption?: 'timezone' | 'last-active';
-      deliveryTimeOfDay?: string; // E.g., "9:00AM"
+      deliveryTimeOfDay?: string;
     },
   ) {
     const url = 'https://api.onesignal.com/notifications';
@@ -34,8 +43,6 @@ export class OneSignalService {
       headings: { en: title },
       contents: { en: message },
     };
-
-    // Agregar programación si se especifica
     if (scheduleOptions) {
       if (scheduleOptions.sendAfter) {
         data.send_after = scheduleOptions.sendAfter;
